@@ -19,7 +19,7 @@
             if (isset($_SESSION['success'])) { ?>
                 <div class='alert alert-success alert-dismissible'>
                     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                    <h4><i class='icon fa fa-check'></i>¡Proceso Exitoso!</h4>
+                    <h4><i class='icon fa fa-check'></i>锟�0锟�3Proceso Exitoso!</h4>
                     <?php echo $_SESSION['success'] ?>
                 </div>
                 <?php unset($_SESSION['success']); ?>
