@@ -53,6 +53,7 @@
                   <th>Eliminar</th>
                   <th>Agregar Notas</th>
                   <th>Ver Notas</th>
+                  <th>Horas Extra</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -68,6 +69,7 @@
                       <td class="<?php echo ($permiso["eliminar"] == 'Sí') ? 'verde-claro' : 'rojo'; ?>"><?php echo $permiso["eliminar"]; ?></td>
                       <td class="<?php echo ($permiso["agregar_notas"] == 'Sí') ? 'verde-claro' : 'rojo'; ?>"><?php echo $permiso["agregar_notas"]; ?></td>
                       <td class="<?php echo ($permiso["ver_notas"] == 'Sí') ? 'verde-claro' : 'rojo'; ?>"><?php echo $permiso["ver_notas"]; ?></td>
+                      <td class="<?php echo ($permiso["hora_extra"] == 'Sí') ? 'verde-claro' : 'rojo'; ?>"><?php echo $permiso["hora_extra"]; ?></td>
                       <td>
                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editarModal<?php echo $permiso["id"]; ?>">Editar</button>
                         <form method="POST" action="gestion_practicante.php" style="display: inline-block;">
@@ -140,6 +142,13 @@
                                     <select class="form-control" id="ver_notas" name="ver_notas" required>
                                     <option value="Sí" <?php if ($permiso["ver_notas"] == "Sí") echo "selected"; ?>>Sí</option>
                                     <option value="No" <?php if ($permiso["ver_notas"] == "No") echo "selected"; ?>>No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hora_extra">Horas Extra:</label>
+                                    <select class="form-control" id="hora_extra" name="hora_extra" required>
+                                    <option value="Sí" <?php if ($permiso["hora_extra"] == "Sí") echo "selected"; ?>>Sí</option>
+                                    <option value="No" <?php if ($permiso["hora_extra"] == "No") echo "selected"; ?>>No</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary" name="Update">Actualizar</button>

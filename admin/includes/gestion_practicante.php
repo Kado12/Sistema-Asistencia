@@ -13,8 +13,8 @@ function obtenerTodosPermisos($conn) {
     return [];
 }
 
-function actualizarPermiso($conn, $id, $idRango, $modulo, $crear, $leer, $actualizar, $eliminar, $agregar_notas, $ver_notas) {
-    $query = "UPDATE permisos_practicante SET id_rango = '$idRango', modulo = '$modulo', crear = '$crear', leer = '$leer', actualizar = '$actualizar', eliminar = '$eliminar', agregar_notas = '$agregar_notas', ver_notas = '$ver_notas' WHERE id = $id";
+function actualizarPermiso($conn, $id, $idRango, $modulo, $crear, $leer, $actualizar, $eliminar, $agregar_notas, $ver_notas,$hora_extra) {
+    $query = "UPDATE permisos_practicante SET id_rango = '$idRango', modulo = '$modulo', crear = '$crear', leer = '$leer', actualizar = '$actualizar', eliminar = '$eliminar', agregar_notas = '$agregar_notas', ver_notas = '$ver_notas', hora_extra = '$hora_extra' WHERE id = $id";
     $result = $conn->query($query);
 
     if ($result) {
@@ -45,8 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["Update"])) {
     $eliminar = $_POST["eliminar"];
     $agregar_notas = $_POST["agregar_notas"];
     $ver_notas = $_POST["ver_notas"];
+    $hora_extra = $_POST["hora_extra"];
 
-    if (actualizarPermiso($conn, $id, $idRango, $modulo, $crear, $leer, $actualizar, $eliminar, $agregar_notas, $ver_notas)) {
+    if (actualizarPermiso($conn, $id, $idRango, $modulo, $crear, $leer, $actualizar, $eliminar, $agregar_notas, $ver_notas,$hora_extra)) {
         echo "Permiso actualizado exitosamente.";
     } else {
         echo "Error al actualizar el permiso.";

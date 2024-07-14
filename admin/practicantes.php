@@ -33,7 +33,7 @@
             $gestionPracticantes4 = $permisoPracticantes['eliminar'];
             $gestionPracticantes5 = $permisoPracticantes['agregar_notas'];
             $gestionPracticantes6 = $permisoPracticantes['ver_notas'];
-            // $gestionPracticantes7 = $permisoPracticantes['hora_extra'];
+            $gestionPracticantes7 = $permisoPracticantes['hora_extra'];
             ?>
             <div class="card">
                 <?php if ($gestionPracticantes2 == "Sí") { ?>
@@ -134,10 +134,11 @@
                                                     <i class="fa fa-eye"></i> Ver Notas
                                                 </a>
                                             <?php } ?>
-                                            <button class="btn btn-primary btn-sm rounded-3 hora_extra" data-id="<?= $row['empid'] ?>">
-                                                <i class="fa fa-clock"></i> Horas Extra
-                                            </button>
-
+                                            <?php if ($gestionPracticantes7 == "Sí") { ?>
+                                                <button class="btn btn-primary btn-sm rounded-3 hora_extra" data-id="<?php echo htmlspecialchars($row['empid']); ?>">
+                                                    <i class="fa fa-clock"></i> Horas Extra
+                                                </button>
+                                            <?php } ?>
                                             <button class="btn btn-info btn-sm rounded-3 text-light activities" data-id="<?= $row['empid'] ?>">
                                                 <i class="fa-solid fa-list-check"></i> Actividades
                                             </button>
@@ -727,135 +728,176 @@
             <div class="modal-content rounded-3">
                 <div class="modal-header py-2">
                     <h4 class="modal-title text-white fw-bold ms-auto">Horas Extra</h4>
-                    <button class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button id="btn_cerrar" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="includes/actividad_add.php">
+                
+                <div class="user-info container-fluid pt-4" style="padding-left: 30px; padding-right: 30px;">
+                    <p>Por favor verifica la información del usuario antes de agregar las horas extras. Asegúrate de que los datos sean correctos y actualiza el registro con las nuevas horas extras según corresponda.</p>
+                    <p><strong>Usuario: </strong><span id="userName"></span></p>
+                    <p><strong>Horas Extras Previas: </strong><span id="userExtraHours"></span> horas</p>
+                    <p>Por favor, ingresa las nuevas horas extras que deseas agregar para este usuario:</p>
+                </div>
+
+
+                <form id="form_hour" method="POST" action="includes/practicante_hourExtra.php ">
                     <div class="modal-body d-flex flex-column gap-4 p-4 px-sm-5">
                         <div class="col-sm-7 mx-auto ps-sm-4">
                             <label for="fecha" class="fw-bolder">Horas Extras:</label>
-                            <input type="number" id="horaExtra" class="form-control rounded text-center border-0 py-2 subcriterio-input" name="hora_extra" style="background-color: #e6e6e6;" required>
+                            <input min="0" type="number" id="horaExtra" class="form-control rounded text-center border-0 py-2 subcriterio-input" name="horaExtra" style="background-color: #e6e6e6;" required> <!-- mandara lanueva hora -->
                         </div>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success" name="add">
+                        <button id="btn_cerrar_footer" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <input type="hidden" id="id_horaExtra" name="id">
+                        <button id="btn_guardar" type="submit" class="btn btn-success" name="add">
                             <i class="fa-solid fa-plus me-2"></i>Guardar
                         </button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                    <?php include 'includes/scripts2.php'; ?>
+    <?php include 'includes/scripts2.php'; ?>
 
-                    <script src="js/scripts.js"></script>
+    <script src="js/scripts.js"></script>
 
-                    <!-- CALCULAR PROMEDIO DE NOTAS -->
-                    <script>
-                        $(".subcriterio-input").on("input", function() {
-                            var criterio = $(this).closest(".criterio-container");
-                            var subcriterios = criterio.find(".subcriterio-input");
-                            var subtotal = 0;
-                            var count = 0;
+    <!-- CALCULAR PROMEDIO DE NOTAS -->
+    <script>
+        $(".subcriterio-input").on("input", function() {
+            var criterio = $(this).closest(".criterio-container");
+            var subcriterios = criterio.find(".subcriterio-input");
+            var subtotal = 0;
+            var count = 0;
 
-                            subcriterios.each(function() {
-                                var value = $(this).val();
-                                if (value !== "") {
-                                    subtotal += parseFloat(value);
-                                    count++;
-                                }
-                            });
+            subcriterios.each(function() {
+                var value = $(this).val();
+                if (value !== "") {
+                    subtotal += parseFloat(value);
+                    count++;
+                }
+            });
 
-                            var promedio = subtotal / count;
-                            criterio.find(".subtotal-input").val(promedio.toFixed(2));
+            var promedio = subtotal / count;
+            criterio.find(".subtotal-input").val(promedio.toFixed(2));
 
-                            // Calcular el promedio de los subtotales
-                            var total = 0;
-                            var criterios = $(".criterio-container");
-                            var criteriosCount = 0;
+            // Calcular el promedio de los subtotales
+            var total = 0;
+            var criterios = $(".criterio-container");
+            var criteriosCount = 0;
 
-                            criterios.each(function() {
-                                var subtotalValue = parseFloat($(this).find(".subtotal-input").val());
-                                if (!isNaN(subtotalValue)) {
-                                    total += subtotalValue;
-                                    criteriosCount++;
-                                }
-                            });
+            criterios.each(function() {
+                var subtotalValue = parseFloat($(this).find(".subtotal-input").val());
+                if (!isNaN(subtotalValue)) {
+                    total += subtotalValue;
+                    criteriosCount++;
+                }
+            });
 
-                            var totalPromedio = total / criteriosCount;
-                            $("#total").val(totalPromedio.toFixed(2));
-                        });
-                    </script>
+            var totalPromedio = total / criteriosCount;
+            $("#total").val(totalPromedio.toFixed(2));
+        });
+    </script>
 
-                    <!-- DATA PARA MODAL -->
-                    <script>
-                        $('.edit').on("click", function(e) {
-                            $('#edit_practicante').modal('show');
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
+    <!-- DATA PARA MODAL -->
+    <script>
+        $('.edit').on("click", function(e) {
+            $('#edit_practicante').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
 
-                        $('.delete').on("click", function(e) {
-                            $('#delete_practicante').modal('show');
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
+        $('.delete').on("click", function(e) {
+            $('#delete_practicante').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
 
-                        $('.add').on("click", function(e) {
-                            $('#add_nota').modal('show');
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
+        $('.add').on("click", function(e) {
+            $('#add_nota').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
 
-                        $('.activities').on("click", function(e) {
-                            $('#add_actividad').modal('show');
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
+        $('.activities').on("click", function(e) {
+            $('#add_actividad').modal('show');
+            var id = $(this).data('id');
+            getRow(id);
+        });
 
-                        $('.photo').on("click", function(e) {
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
-                        $('.hora_extra').on("click", function(e) {
-                            $('#add_hora').modal('show');
-                            var id = $(this).data('id');
-                            getRow(id);
-                        });
+        $('.photo').on("click", function(e) {
+            var id = $(this).data('id');
+            getRow(id);
+        });
+        $('.hora_extra').on("click", function(e) {
+            var id = $(this).data('id');
+            getRowHour(id);
+            $('#id_horaExtra').val(id);
+            $('#add_hora').modal('show');
+        });
 
-                        function getRow(id) {
-                            $.ajax({
-                                type: 'POST',
-                                url: 'employee_row.php',
-                                data: {
-                                    id: id
-                                },
-                                dataType: 'json',
-                                success: function(response) {
-                                    $('.id_practicante').val(response.id);
-                                    $('.empid').val(response.empid);
-                                    $('.employee_id').html(response.employee_id);
-                                    $('#del_employee_name').html(response.firstname + ' ' + response.lastname);
-                                    $('#employee_name').html(response.firstname + ' ' + response.lastname);
-                                    $('#edit_firstname').val(response.firstname);
-                                    $('#edit_lastname').val(response.lastname);
-                                    $('#edit_address').val(response.address);
-                                    $('#datepicker_edit').val(response.birthdate);
-                                    $('#edit_contact').val(response.contact_info);
-                                    $('#gender_val').val(response.gender).html(response.gender);
-                                    $('#position_val').val(response.position_id).html(response.description);
-                                    $('#negocio_val').val(response.negocio_id).html(response.nombre_negocio);
-                                    $('#schedule_val').val(response.schedule_id).html(response.time_in + ' - ' + response.time_out);
-                                    $('#edit_date_in').val(response.date_in).html(response.date_in);
-                                    $('#departamento_val').val(response.departamento_id).html(response.nombre_departamento);
-                                    $('#edit_date_out').val(response.date_out).html(response.date_out);
-                                    $('#edit_birthday').val(response.birthday).html(response.birthday);
-                                    $('#type_practice_val').val(response.type_practice).html(response.type_practice);
-                                    $('#time_practice_val').val(response.time_practice).html(response.time_practice);
-                                    $('#edit_dni').val(response.dni);
-                                    $('#edit_personal_email').val(response.personal_email);
-                                    $('#edit_institutional_email').val(response.institutional_email);
-                                    $('#edit_university').val(response.university);
-                                    $('#edit_career').val(response.career);
-                                }
-                            });
-                        }
-                    </script>
+        function getRow(id) {
+            $.ajax({
+                type: 'POST',
+                url: 'employee_row.php',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('.id_practicante').val(response.id);
+                    $('.empid').val(response.empid);
+                    $('.employee_id').html(response.employee_id);
+                    $('#del_employee_name').html(response.firstname + ' ' + response.lastname);
+                    $('#employee_name').html(response.firstname + ' ' + response.lastname);
+                    $('#edit_firstname').val(response.firstname);
+                    $('#edit_lastname').val(response.lastname);
+                    $('#edit_address').val(response.address);
+                    $('#datepicker_edit').val(response.birthdate);
+                    $('#edit_contact').val(response.contact_info);
+                    $('#gender_val').val(response.gender).html(response.gender);
+                    $('#position_val').val(response.position_id).html(response.description);
+                    $('#negocio_val').val(response.negocio_id).html(response.nombre_negocio);
+                    $('#schedule_val').val(response.schedule_id).html(response.time_in + ' - ' + response.time_out);
+                    $('#edit_date_in').val(response.date_in).html(response.date_in);
+                    $('#departamento_val').val(response.departamento_id).html(response.nombre_departamento);
+                    $('#edit_date_out').val(response.date_out).html(response.date_out);
+                    $('#edit_birthday').val(response.birthday).html(response.birthday);
+                    $('#type_practice_val').val(response.type_practice).html(response.type_practice);
+                    $('#time_practice_val').val(response.time_practice).html(response.time_practice);
+                    $('#edit_dni').val(response.dni);
+                    $('#edit_personal_email').val(response.personal_email);
+                    $('#edit_institutional_email').val(response.institutional_email);
+                    $('#edit_university').val(response.university);
+                    $('#edit_career').val(response.career);
+                }
+            });
+        }
+        function getRowHour(id) {
+            $.ajax({
+                type: 'POST',
+                url: 'hour_extra.php',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('#userExtraHours').text(response.extra_hour);
+                    $('#userName').text(response.fullname);
+                    $('.btn_guardar').prop('disabled', true);
+                }
+            });
+        }
+        function clearSpanContents() {
+            document.getElementById('userExtraHours').textContent = '';
+            document.getElementById('userName').textContent = '';
+        }
+
+        document.getElementById('btn_cerrar_footer').addEventListener('click', clearSpanContents);
+        document.getElementById('btn_cerrar').addEventListener('click', clearSpanContents);
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('horaExtra').value = '';
+        });
+    </script>
 </body>
