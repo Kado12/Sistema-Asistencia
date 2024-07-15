@@ -206,11 +206,13 @@
                                 </div>
                                 <?php } else { ?>
                                 <div class="col-sm-13 ">
+
                                     <?php 
                                     if ($_GET['test'] == 1){?>
                                     <label for="pregunta1" class="fw-bolder">Pregunta</label>
                                     <input type="text" class="form-control rounded" id="pregunta1" name="pregunta1" required>
                                     <?php } else { ?>
+
                                     <label for="pregunta1" class="fw-bolder">Pregunta</label>
                                     <input type="text" class="form-control rounded" id="pregunta1" name="pregunta1" required>
                                     <label for="opc1" class="fw-bolder">Opcion 1</label>
@@ -230,6 +232,7 @@
                             <div class="row">
                                 <?php 
                                 if ($_GET['test'] == 1){?>
+                                <div id="campos-dinamicos">
                                 <div class="col-sm-4">
                                     <label for="valor1" class="fw-bolder">Valor 1</label>
                                     <input type="text" class="form-control rounded" id="valor1" name="valor1" required>
@@ -237,6 +240,7 @@
                                 <div class="col-sm-4">
                                     <label for="valor2" class="fw-bolder">Valor 2</label>
                                     <input type="text" class="form-control rounded" id="valor2" name="valor2" required>
+                                </div>
                                 </div>
                                 <?php } else { ?>
                                 <div class="col-sm-4">
@@ -263,6 +267,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                        <button type="button" id="agregar-campo" onclick="agregarCampo()">Agregar Campo</button>
+
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-success" name="add" >
                                 <i class="fa-solid fa-floppy-disk me-2"></i>Guardar
@@ -321,6 +327,7 @@
                                 <?php } ?>
                         </div>
                         <div class="row">
+                            
                                 <?php 
                                 if ($_GET['test'] == 1){?>
                                 <div class="col-sm-4">
@@ -331,6 +338,7 @@
                                     <label for="editvalor2" class="fw-bolder">Valor 2</label>
                                     <input type="text" class="form-control rounded" id="editvalor2" name="editvalor2" required>
                                 </div>
+                                
                                 <?php } else { ?>
                                 <div class="col-sm-4">
                                     <label for="editvalor1" class="fw-bolder">Valor 1</label>
@@ -356,6 +364,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" name="edit">
+                            <i class="fa fa-edit me-2"></i>Agregar Valor
+                        </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-success" name="edit">
                             <i class="fa fa-edit me-2"></i>Actualizar
@@ -437,6 +448,28 @@
             });
         }
     </script>
+    <script>
+    // Contador para llevar el registro de cuántos campos se han agregado
+    var contadorCampos = 2;
+
+    // Función para agregar un nuevo campo de valor
+    function agregarCampo() {
+        if (contadorCampos < 5) { // Verifica que no se haya alcanzado el máximo de 5 campos
+            var container = document.getElementById('campos-dinamicos');
+            var nuevoCampo = document.createElement('div');
+            nuevoCampo.classList.add('col-sm-4');
+            nuevoCampo.innerHTML = `
+                <label class="fw-bolder">Valor ${contadorCampos + 1}</label>
+                <input type="text" class="form-control rounded" name="valor1[]" required>
+            `;
+            container.appendChild(nuevoCampo);
+            contadorCampos++; // Incrementa el contador de campos agregados
+        } else {
+            alert('Ya se ha alcanzado el máximo de 5 campos.');
+        }
+    }
+</script>
+
 </body>
 
 </html>

@@ -8,6 +8,7 @@
         $test_title = "¿Cómo es el liderazgo en tu equipo?";
         $label_1 = "VERDADERO";
         $label_2 = "FALSO";
+        $label_3 = "gaa";
     } else {
         $position = 2;
         $test_description = "Comunicación Interna necesita tu gran apoyo para evaluar a tus administradores de proyectos y reconocer su liderazgo.";
@@ -53,6 +54,10 @@
                             <label style="font-size: 14px;">
                                 <input type="radio" name="p<?php echo $i ?>" value="<?php echo $rowPreg['valor_2'] ?>">
                                 <?php echo $label_2 ?>
+                            </label>
+                            <label style="font-size: 14px;">
+                                <input type="radio" name="p<?php echo $i ?>" value="<?php echo $rowPreg['valor_2'] ?>">
+                                <?php echo $label_3 ?>
                             </label>
                                 <?php } else { ?>
                             <label style="font-size: 14px;">
