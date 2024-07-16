@@ -760,7 +760,20 @@
     </div>
 
     <?php include 'includes/scripts2.php'; ?>
-
+    
+    <!-- ALERTS -->
+    <?php
+    if (isset($_SESSION['alert'])) {
+        $alert = $_SESSION['alert'];
+        echo "<script>
+            Swal.fire({
+                icon: '{$alert['type']}',
+                title: '{$alert['message']}'
+            });
+        </script>";
+        unset($_SESSION['alert']);
+    }
+    ?>
     <script src="js/scripts.js"></script>
 
     <!-- CALCULAR PROMEDIO DE NOTAS -->
