@@ -36,7 +36,7 @@
                                     $queryAuxGerencia = $conn->query($sqlAuxGerencia);
                                     ?>
                                     <span class="toggle container-positions fw-bolder">
-                                        Aux. de Gerencia
+                                        Adm. General
                                         <hr>
                                         <div class="person-count-container">
                                             <span class="total-persons">
@@ -67,83 +67,110 @@
                                         <?php } ?>
                                     </ul>
                                     <ul>
-                                        <?php
-                                        $sqlDepartamentos = "SELECT * FROM departamentos WHERE NOT id = 1 AND NOT id = 6 AND NOT id = 7";
-                                        $queryDepartamentos = $conn->query($sqlDepartamentos);
-                                        $rowDepartamentos = $queryDepartamentos->fetch_all(MYSQLI_ASSOC);
+    <?php
+    $sqlDepartamentos = "SELECT * FROM departamentos WHERE NOT id = 1";
+    $queryDepartamentos = $conn->query($sqlDepartamentos);
+    $rowDepartamentos = $queryDepartamentos->fetch_all(MYSQLI_ASSOC);
 
-                                        for ($i = 0; $i < count($rowDepartamentos); $i++) {
-                                            if ($i == 2) {
-                                                $sqlNumEmployees = "SELECT * FROM employees e
-                                                INNER JOIN departamentos d ON e.departamento_id = d.id
-                                                WHERE d.id = 6 OR d.id = 7";
-                                                ?>
-                                                <li>
-                                                    <span class="toggle container-positions fw-bolder">
-                                                        Departamento General de Proyecto
-                                                        <hr>
-                                                        <div class="person-count-container">
-                                                            <span class="total-persons">
-                                                                <?= $conn->query($sqlNumEmployees)->num_rows ?>
-                                                            </span>
-                                                            <i class="fas fa-users"></i>
-                                                        </div>
+    foreach ($rowDepartamentos as $key => $departamento) {
+        if ($key == 2) { // Cambia este valor si necesitas mostrar algo específico en otro índice
+            $sqlNumEmployeesPeople = "SELECT COUNT(*) as total FROM employees e
+                INNER JOIN position p ON e.position_id = p.id
+                WHERE  p.id IN (3,4,5,8,6,7,17,2,13)";
+            $resultPeople = $conn->query($sqlNumEmployeesPeople);
+            $totalPeople = $resultPeople->fetch_assoc()['total'];
+            ?>
+            <li>
+                <span class="toggle container-positions fw-bolder">
+                    People
+                    <hr>
+                    <div class="person-count-container">
+                        <span class="total-persons">
+                            <?= $totalPeople ?>
+                        </span>
+                        <i class="fas fa-users"></i>
+                    </div>
+                </span>
+                <ul class="subordinates">
+                    <?php
+                    $sqlPositions = "SELECT * FROM position WHERE id IN (11, 17)";
+                    $queryPositions = $conn->query($sqlPositions);
+
+                    while ($rowPosition = $queryPositions->fetch_assoc()) { ?>
+                        <li>
+                            <span class="toggle container-positions fw-bolder">
+                                <?= $rowPosition['description'] ?>
+                                <hr>
+                                <div class="person-count-container">
+                                    <span class="total-persons">
+                                        <?= $conn->query("SELECT COUNT(*) as total FROM employees WHERE position_id = {$rowPosition['id']}")->fetch_assoc()['total'] ?>
+                                    </span>
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </span>
+                            <?php if ($rowPosition['id'] == 11) { // Clima y Cultura ?>
+                                <ul class="subordinates">
+                                    <?php
+                                    $sqlNumEmployees = "SELECT COUNT(*) as total FROM employees e 
+                                        INNER JOIN departamentos d ON e.departamento_id = d.id
+                                        WHERE d.id IN (6, 7)";
+                                    $resultNumEmployees = $conn->query($sqlNumEmployees);
+                                    $totalEmployees = $resultNumEmployees->fetch_assoc()['total'];
+                                    
+                                    $sqlJefatura = "SELECT * FROM departamentos WHERE id IN (6, 7)";
+                                    $queryJefatura = $conn->query($sqlJefatura);
+
+                                    while ($rowJefatura = $queryJefatura->fetch_assoc()) { ?>
+                                        <li>
+                                            <span class="toggle container-positions fw-bolder">
+                                                Adm. de
+                                                <?= $rowJefatura['nombre_departamento'] ?>
+                                                <hr>
+                                                <div class="person-count-container">
+                                                    <span class="total-persons">
+                                                        <?= $conn->query("SELECT * FROM employees WHERE departamento_id = {$rowJefatura['id']}")->num_rows ?>
                                                     </span>
-                                                    <ul class="subordinates">
-                                                        <?php
-                                                        $sqlJefatura = "SELECT * FROM departamentos WHERE id = 6 OR id = 7";
-                                                        $queryJefatura = $conn->query($sqlJefatura);
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                            </span>
+                                            <ul class="subordinates">
+                                                <?php
+                                                $sqlAdmJefatura = "SELECT e.id, e.firstname, e.lastname, p.description, d.nombre_departamento
+                                                    FROM employees e
+                                                    INNER JOIN position p ON e.position_id = p.id
+                                                    INNER JOIN departamentos d ON e.departamento_id = d.id
+                                                    WHERE e.departamento_id = {$rowJefatura['id']} AND e.position_id = 13";
+                                                $queryAdmJefatura = $conn->query($sqlAdmJefatura);
 
-                                                        while ($rowJefatura = $queryJefatura->fetch_assoc()) { ?>
-                                                            <li>
-                                                                <span class="toggle container-positions fw-bolder">
-                                                                    Adm. de
-                                                                    <?= $rowJefatura['nombre_departamento'] ?>
-                                                                    <hr>
-                                                                    <div class="person-count-container">
-                                                                        <span class="total-persons">
-                                                                            <?= $conn->query("SELECT * FROM employees WHERE departamento_id = {$rowJefatura['id']}")->num_rows ?>
+                                                while ($rowAdmJefatura = $queryAdmJefatura->fetch_assoc()) { ?>
+                                                    <li>
+                                                        <div class="employee-card view"
+                                                            data-id="<?= $rowAdmJefatura['id'] ?>">
+                                                            <div class="employee-details">
+                                                                <div class="employee-info">
+                                                                    <img src="../images/profile.jpg"
+                                                                        alt="Adm. de Jefatura <?= $rowJefatura['nombre_departamento'] ?>"
+                                                                        class="employee-photo">
+                                                                    <div class="employee-text">
+                                                                        <span class="employee-name">
+                                                                            <?= $rowAdmJefatura['firstname'] . ' ' . $rowAdmJefatura['lastname'] ?>
                                                                         </span>
-                                                                        <i class="fas fa-users"></i>
+                                                                        <hr>
+                                                                        <span class="business-name">
+                                                                            <?= $rowAdmJefatura['description'] ?>
+                                                                        </span>
                                                                     </div>
-                                                                </span>
-                                                                <ul class="subordinates">
-                                                                    <?php
-                                                                    $sqlAdmJefatura = "SELECT e.id, e.firstname, e.lastname, p.description
-                                                                        FROM employees e
-                                                                        INNER JOIN position p ON e.position_id = p.id
-                                                                        WHERE e.departamento_id = {$rowJefatura['id']} AND e.position_id = 13";
-                                                                    $queryAdmJefatura = $conn->query($sqlAdmJefatura);
-
-                                                                    while ($rowAdmJefatura = $queryAdmJefatura->fetch_assoc()) { ?>
-                                                                        <li>
-                                                                            <div class="employee-card view"
-                                                                                data-id="<?= $rowAdmJefatura['id'] ?>">
-                                                                                <div class="employee-details">
-                                                                                    <div class="employee-info">
-                                                                                        <img src="../images/profile.jpg"
-                                                                                            alt="Adm. de Jefatura <?= $rowJefatura['nombre_departamento'] ?>"
-                                                                                            class="employee-photo">
-                                                                                        <div class="employee-text">
-                                                                                            <span class="employee-name">
-                                                                                                <?= $rowAdmJefatura['firstname'] . ' ' . $rowAdmJefatura['lastname'] ?>
-                                                                                            </span>
-                                                                                            <hr>
-                                                                                            <span class="business-name">
-                                                                                                <?= $rowAdmJefatura['description'] ?>
-                                                                                            </span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    <?php } ?>
-                                                                </ul>
-                                                                <ul class="subordinates">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                            <ul class="subordinates">
                                                                     <?php
                                                                     $rowJefatura['id'] == 6 ?
-                                                                        $sqlNegocio = "SELECT * FROM negocio WHERE id = 2 OR id = 10" :
-                                                                        $sqlNegocio = "SELECT * FROM negocio WHERE id = 3 OR id = 4";
+                                                                        $sqlNegocio = "SELECT * FROM negocio WHERE id = 2 OR id = 4 OR id = 10 OR id = 3 OR id = 8 OR id = 11" :
+                                                                        $sqlNegocio = "SELECT * FROM negocio WHERE   id = 7  OR id = 12";
                                                                     $queryNegocio = $conn->query($sqlNegocio);
 
                                                                     while ($rowNegocio = $queryNegocio->fetch_assoc()) { ?>
@@ -192,6 +219,9 @@
                                                                             <?php } ?>
                                                                             <ul class="subordinates">
                                                                                 <?php $sqlNumEmployees = "SELECT * FROM employees WHERE negocio_id = {$rowNegocio['id']} AND (position_id = 3 OR position_id = 4 OR position_id = 5 OR position_id = 8)"; ?>
+                                                                               <?php $queryNumEmployees = $conn->query($sqlNumEmployees);
+
+                                                                                 if ($queryNumEmployees->num_rows > 1) { ?>
                                                                                 <li>
                                                                                     <span class="toggle container-positions fw-bolder">
                                                                                         Departamento Comercial
@@ -205,9 +235,9 @@
                                                                                     </span>
                                                                                     <ul>
                                                                                         <?php
-                                                                                        $sqlPosition = "SELECT * FROM position WHERE id = 3 OR id = 4 OR id = 5 OR id = 8";
+                                                                                        $sqlPosition = "SELECT * FROM position WHERE id = 3 OR id = 4 OR id = 5 OR id = 8 or id=6 ";
                                                                                         $queryPosition = $conn->query($sqlPosition);
-
+                                                                                        
                                                                                         while ($rowPosition = $queryPosition->fetch_assoc()) { ?>
                                                                                             <li>
                                                                                                 <span
@@ -223,7 +253,7 @@
                                                                                                     </div>
                                                                                                 </span>
                                                                                                 <?php
-                                                                                                $sql = "SELECT e.id, e.firstname, e.lastname, n.nombre_negocio
+                                                                                                $sql = "SELECT e.id, e.firstname, e.lastname, p.description
                                                                                                     FROM employees e
                                                                                                     INNER JOIN negocio n ON e.negocio_id = n.id
                                                                                                     INNER JOIN position p ON e.position_id = p.id
@@ -247,7 +277,7 @@
                                                                                                                         <hr>
                                                                                                                         <span
                                                                                                                             class="business-name">
-                                                                                                                            <?= $employee['nombre_negocio'] ?>
+                                                                                                                            <?= $employee['description'] ?>
                                                                                                                         </span>
                                                                                                                     </div>
                                                                                                                 </div>
@@ -259,14 +289,15 @@
                                                                                         <?php } ?>
                                                                                     </ul>
                                                                                 </li>
+                                                                                <?php } ?>
                                                                                 <?php
-                                                                                $sqlNumEmployees = "SELECT * FROM employees WHERE negocio_id = {$rowNegocio['id']} AND position_id = 6";
+                                                                                $sqlNumEmployees = "SELECT * FROM employees WHERE negocio_id = {$rowNegocio['id']} AND position_id = 7";
                                                                                 $queryNumEmployees = $conn->query($sqlNumEmployees);
 
-                                                                                if ($queryNumEmployees->num_rows > 0) { ?>
+                                                                                if ($queryNumEmployees->num_rows > 5) { ?>
                                                                                     <li>
                                                                                         <span class="toggle container-positions fw-bolder">
-                                                                                            Departamento Creativo
+                                                                                            Departamento Tecnológico
                                                                                             <hr>
                                                                                             <div class="person-count-container">
                                                                                                 <span class="total-persons">
@@ -277,7 +308,7 @@
                                                                                         </span>
                                                                                         <ul>
                                                                                             <?php
-                                                                                            $sqlPosition = "SELECT * FROM position WHERE id = 6";
+                                                                                            $sqlPosition = "SELECT * FROM position WHERE id = 7";
                                                                                             $queryPosition = $conn->query($sqlPosition);
                                                                                             $rowPosition = $queryPosition->fetch_assoc();
                                                                                             ?>
@@ -295,7 +326,7 @@
                                                                                                     </div>
                                                                                                 </span>
                                                                                                 <?php
-                                                                                                $sql = "SELECT e.id, e.firstname, e.lastname, n.nombre_negocio
+                                                                                                $sql = "SELECT e.id, e.firstname, e.lastname, p.description
                                                                                                     FROM employees e
                                                                                                     INNER JOIN negocio n ON e.negocio_id = n.id
                                                                                                     INNER JOIN position p ON e.position_id = p.id
@@ -319,7 +350,7 @@
                                                                                                                         <hr>
                                                                                                                         <span
                                                                                                                             class="business-name">
-                                                                                                                            <?= $employee['nombre_negocio'] ?>
+                                                                                                                            <?= $employee['description'] ?>
                                                                                                                         </span>
                                                                                                                     </div>
                                                                                                                 </div>
@@ -335,55 +366,18 @@
                                                                         </li>
                                                                     <?php } ?>
                                                                 </ul>
-                                                            </li>
-                                                        <?php } ?>
-                                                    </ul>
-                                                </li>
-                                            <?php }
-                                            $sqlNumEmployees = "SELECT e.id, e.firstname, e.lastname, p.description, d.nombre_departamento
-                                            FROM employees e
-                                            INNER JOIN position p ON e.position_id = p.id
-                                            INNER JOIN departamentos d ON e.departamento_id = d.id
-                                            WHERE e.departamento_id = {$rowDepartamentos[$i]['id']}";
-                                            $queryEmpDepartamento = $conn->query($sqlNumEmployees); ?>
-                                            <li>
-                                                <span class="toggle container-positions fw-bolder">
-                                                    Departamento
-                                                    <?= $rowDepartamentos[$i]['nombre_departamento'] ?>
-                                                    <hr>
-                                                    <div class="person-count-container">
-                                                        <span class="total-persons">
-                                                            <?= $queryEmpDepartamento->num_rows ?>
-                                                        </span>
-                                                        <i class="fas fa-users"></i>
-                                                    </div>
-                                                </span>
-                                                <?php while ($rowEmpDepartamento = $queryEmpDepartamento->fetch_assoc()) { ?>
-                                                    <ul class="subordinates">
-                                                        <div class="employee-card view"
-                                                            data-id="<?= $rowEmpDepartamento['id'] ?>">
-                                                            <div class="employee-details">
-                                                                <div class="employee-info">
-                                                                    <img src="../images/profile.jpg"
-                                                                        alt="Dep. <?= $rowDepartamentos[$i]['nombre_departamento'] ?>"
-                                                                        class="employee-photo">
-                                                                    <div class="employee-text">
-                                                                        <span class="employee-name">
-                                                                            <?= $rowEmpDepartamento['firstname'] . ' ' . $rowEmpDepartamento['lastname'] ?>
-                                                                        </span>
-                                                                        <hr>
-                                                                        <span class="business-name">
-                                                                            <?= $rowEmpDepartamento['description'] ?>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </ul>
-                                                <?php } ?>
-                                            </li>
-                                        <?php } ?>
-                                    </ul>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            <?php } ?>
+                                                                                                </li>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </li>
+        <?php }
+    } ?>
+</ul>
                                 </li>
                             </ul>
                         </li>

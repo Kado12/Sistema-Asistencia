@@ -12,7 +12,7 @@ if (isset($_POST['delete'])) {
 		// Sentencia SQL para insertar los datos seleccionados en la tabla papelera
 		$sqlInsert = "INSERT INTO papelera SELECT * FROM employees WHERE id = '$id'";
 		// Ejecutar la consulta de inserción
-		if ($conn->query($sqlInsert) === TRUE) {
+		if ($conn->query($sqlInsert) === true) {
 			$_SESSION['success'] = 'Empleado eliminado con éxito';
 		} else {
 			$_SESSION['error'] = $conn->error;

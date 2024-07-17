@@ -17,7 +17,7 @@
 
         <!-- CONTENIDO PRINCIPAL -->
         <section class="content p-0 my-4">
-        <?php if (isset($_SESSION['error'])) { ?>
+            <?php if (isset($_SESSION['error'])) { ?>
                 <div class='alert alert-danger alert-dismissible'>
                     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                     <h4><i class='icon fa fa-warning'></i> Error!</h4>
@@ -83,10 +83,16 @@
                                                 data-id="<?php echo $row['empid'] ?>" data-photo="<?php echo $row['photo'] ?>">
                                                 <i class="fa fa-edit"></i> Detalles
                                             </button>
-                                            <button type="button" class="btn btn-warning btn-sm text-white rounded-3 btn-justificar-faltas me-2" data-bs-toggle="modal" data-bs-target="#exampleModal" data-empid="<?php echo $row['empid']; ?>">
+                                            <button type="button"
+                                                class="btn btn-warning btn-sm text-white rounded-3 btn-justificar-faltas me-2"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                data-empid="<?php echo $row['empid']; ?>">
                                                 <i class="fa fa-edit"></i> Justificar Faltas
                                             </button>
-                                            <button type="button" class="btn btn-warning btn-sm text-white rounded-3 marcar_asistencia_1 me-2" data-bs-toggle="modal" data-bs-target="#modal_asistencia" data-empid="<?php echo $row['empid']; ?>">
+                                            <button type="button"
+                                                class="btn btn-warning btn-sm text-white rounded-3 marcar_asistencia_1 me-2"
+                                                data-bs-toggle="modal" data-bs-target="#modal_asistencia"
+                                                data-empid="<?php echo $row['empid']; ?>">
                                                 <i class="fa fa-edit"></i> Marcar Asistencia
                                             </button>
                                         <?php } ?>
@@ -103,35 +109,36 @@
         <?php include 'includes/footer.php' ?>
     </div>
 
-        <!-- MODAL DE JUSTIFICAR FALTAS -->
+    <!-- MODAL DE JUSTIFICAR FALTAS -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content rounded-3">
-            <div class="modal-header py-2">
-                <h4 class="modal-title text-white fw-bold ms-auto" id="exampleModalLabel">Justificar Faltas</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="includes/guardar_fecha_justificada.php" method="post">
-    <div class="modal-body">
-        <div class="row justify-content-center">
-            <div class="col-sm-8 col-md-6 col-lg-4">
-                <div class="text-center"> 
-                    <input type="date" class="form-control rounded" id="fecha_justificada" name="fecha_justificada" required>
+        <div class="modal-dialog modal-md">
+            <div class="modal-content rounded-3">
+                <div class="modal-header py-2">
+                    <h4 class="modal-title text-white fw-bold ms-auto" id="exampleModalLabel">Justificar Faltas</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="includes/guardar_fecha_justificada.php" method="post">
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-8 col-md-6 col-lg-4">
+                                <div class="text-center">
+                                    <input type="date" class="form-control rounded" id="fecha_justificada"
+                                        name="fecha_justificada" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success" name="add">
+                            <i class="bi bi-check-circle-fill me-2"></i>Confirmar
+                        </button>
+                    </div>
+                    <input type="hidden" id="employee_id" name="employee_id" value="">
+                </form>
+
             </div>
         </div>
-    </div>
-    <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-success" name="add">
-            <i class="bi bi-check-circle-fill me-2"></i>Confirmar
-        </button>
-    </div>
-    <input type="hidden" id="employee_id" name="employee_id" value="">
-</form>
-
-        </div>
-    </div>
     </div>
 
     <!-- MODAL DE MARCAR ASISTENCIA -->
@@ -147,8 +154,9 @@
                         <div class="row justify-content-center">
                             <div class="col-sm-8 col-md-6 col-lg-4">
                                 <div class="text-center">
-                                    Fecha                            
-                                    <input type="date" class="form-control rounded" id="marcar_fecha_asistencia" name="marcar_fecha_asistencia" required>
+                                    Fecha
+                                    <input type="date" class="form-control rounded" id="marcar_fecha_asistencia"
+                                        name="marcar_fecha_asistencia" required>
                                 </div>
                                 <div>
                                     Hora de Entrada
@@ -267,11 +275,13 @@
                             </div>
                             <div class="col-sm-4 text-center">
                                 <label for="faltas_justificadas" class="fw-bolder">Faltas Justificadas</label>
-                                <input type="text" class="form-control text-center rounded" id="faltas_justificadas" readonly>
+                                <input type="text" class="form-control text-center rounded" id="faltas_justificadas"
+                                    readonly>
                             </div>
                             <div class="col-sm-4 text-center">
                                 <label for="faltas_injustificadas" class="fw-bolder">Faltas Injustificadas</label>
-                                <input type="text" class="form-control text-center rounded" id="faltas_injustificadas" readonly>
+                                <input type="text" class="form-control text-center rounded" id="faltas_injustificadas"
+                                    readonly>
                             </div>
                         </div>
                     </div>
@@ -358,7 +368,7 @@
                         success: function (response) {
                             $('#dias_tardados').val(response.cantidad_tardanzas);
                         }
-                    });   
+                    });
                     $.ajax({
                         type: 'POST',
                         url: 'get_cantidad_faltas_justificadas_injustificadas.php',
@@ -366,27 +376,28 @@
                         dataType: 'json',
                         success: function (response) {
                             $('#faltas_injustificadas').val(response.faltas_injustificadas),
-                            $('#faltas_justificadas').val(response.faltas_justificadas);
-                            
+                                $('#faltas_justificadas').val(response.faltas_justificadas);
+                            var totalFaltas = parseInt(response.faltas_injustificadas) + parseInt(response.faltas_justificadas);
+                            $('#dias_faltados').val(totalFaltas);
                         }
-                    });                
-                }   
+                    });
+                }
             });
         }
 
-        $('body').on('click', '.btn-justificar-faltas', function() {
+        $('body').on('click', '.btn-justificar-faltas', function () {
             var empId = $(this).data('empid');
-            console.log(empId); 
+            console.log(empId);
             $('#employee_id').val(empId);
         });
 
-        $('body').on('click', '.marcar_asistencia_1', function() {
+        $('body').on('click', '.marcar_asistencia_1', function () {
             var empId = $(this).data('empid');
-            console.log(empId); 
+            console.log(empId);
             $('#employee_id2').val(empId);
         });
 
-        
+
 
 
         function showProfileImage(photo) {
