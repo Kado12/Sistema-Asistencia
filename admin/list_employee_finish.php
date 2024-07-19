@@ -59,7 +59,6 @@
                             <th class="align-middle">Area</th>
                             <th class="align-middle">Turno</th>
                             <th class="align-middle">Fecha de Salida</th>
-                            <th class="align-middle">Nueva Fecha de Salida</th>
                         </thead>
                         <tbody>
                             <?php
@@ -78,7 +77,6 @@
                                 $fechaActual = date("Y-m-d");
                                 $actual = new DateTime($fechaActual);
                                 $fechaFinal = new DateTime($row['date_out']);
-                                $fechaFinal_nueva=new DateTime(($row['date_out_new']));
                                 $diferencia = $fechaFinal->diff($actual);
                                 $diasDiferencia = $diferencia->days;
                                 $scheduleId = $row['schedule_id'];
@@ -114,10 +112,6 @@
                                         <?=$row['date_out'];
                                         ?>
                                         </td>
-                                        <td class="align-middle" style="background-color: #5eb130;">
-                                        <?=$row['date_out_new'];
-                                        ?>
-                                        </td>
                                     </tr>
                                 <?php } 
                                 if ($diferencia->days <= 14 && $diferencia->days > 7) { ?>
@@ -151,10 +145,6 @@
                                         <td class="align-middle" style="background-color: gold;">
                                             <?=$row['date_out'];?>
                                         </td>
-                                        <td class="align-middle" style="background-color: #5eb130;">
-                                        <?=$row['date_out_new'];
-                                        ?>
-                                        </td>
                                     </tr>
                                 <?php } 
                                 if ($diferencia->days <= 7 && $diferencia->days >= 0) { ?>
@@ -187,10 +177,6 @@
                                         </td>
                                         <td class="align-middle" style="background-color: #DC3545;">
                                         <?=$row['date_out'];?>
-                                        </td>
-                                        <td class="align-middle" style="background-color: #5eb130;">
-                                        <?=$row['date_out_new'];
-                                        ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
