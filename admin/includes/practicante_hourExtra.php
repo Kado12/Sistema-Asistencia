@@ -21,16 +21,17 @@ if (isset($_POST['add'])) {
 
             $update_sql = "UPDATE asistencia.employees SET extra_hour='$new_total_hours' WHERE id='$id'";
             if ($conn->query($update_sql) === TRUE) {
-                echo "Horas extras actualizadas correctamente.";
+                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Horas extras actualizadas correctamente.'];
             } else {
-                echo "Error al actualizar las horas extras: " . $conn->error;
+                $_SESSION['alert'] = ['type' => 'error', 'message' => 'Error al actualizar las horas extras: ' . $conn->error];
             }
         } else {
-            echo "No se encontró el empleado con ID $id.";
+            $_SESSION['alert'] = ['type' => 'error', 'message' => 'No se encontró el empleado con ID ' . $id];
         }
     } else {
-        echo "Error en la consulta: " . $conn->error;
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Error en la consulta: ' . $conn->error];
     }
+    header('location: ../practicantes.php');
+    exit();
 }
-header('location: ../practicantes.php');
-exit();
+?>
