@@ -33,7 +33,7 @@ if ($cantidadSemanas > 0) {
 
    <div class="container-fluid d-flex align-items-start gap-5" id="grid-perfil">
       <div class="d-flex flex-column gap-4">
-         <div class="d-flex estilo-card-perfil" id="perfil" style="background-size: cover; height: 200px;margin-bottom: 10px;justify-content: center;">
+         <div class="d-flex estilo-card-perfil" id="perfil" style="background-size: cover; height: 200px;margin-bottom: 10px">
             <div class="tarjeta-perfil">
                <div class="target-perfil">
                   <?php
@@ -66,7 +66,7 @@ if ($cantidadSemanas > 0) {
                   <?php echo $row['negocio']; ?>
                </h6>
                <div class="d-block perfil-contrato">
-                  <div class="d-flex" style="flex-wrap: wrap;">
+                  <div class="d-flex" style="flex-wrap: wrap;justify-content: center">
                      <h6 class="letraNavBar diseñoFechaIngreso">Ingreso:</h6>
                      <div class="ps-1 d-flex contenedor-fecha ms-2">
                         <?php
