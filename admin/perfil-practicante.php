@@ -65,40 +65,59 @@ if ($cantidadSemanas > 0) {
                <h6 class="letraNavBar perfil-presentacion2 colorletraperfil fw-normal" style="margin-left: 30px;">
                   <?php echo $row['negocio']; ?>
                </h6>
-               <div class="d-flex perfil-contrato">
-                  <h6 class="letraNavBar diseñoFechaIngreso">Ingreso:</h6>
-                  <div class="ps-1 d-flex contenedor-fecha ms-2">
-                     <?php
-                     $cadena2 = $row['date_in'];
-                     $separador2 = "-";
-                     $array2 = explode($separador2, $cadena2);
-                     ?>
-                     <h6 class="letraNavBar posicion-border3 diseñofecha text-center">
-                        <?php echo $array2[2]; ?>
-                     </h6>
-                     <h6 class="letraNavBar posicion-border1 diseñofecha text-center" style="margin-left: 10px;">
-                        <?php echo $array2[1]; ?>
-                     </h6>
-                     <h6 class="letraNavBar posicion-border2 diseñofecha text-center" style="margin-left: 10px;">
-                        <?php echo $array2[0][2] . $array2[0][3]; ?>
-                     </h6>
-                  </div>
-                  <h6 class="letraNavBar diseñoFechaSalida">Salida:</h6>
-                  <div class="ps-1 d-flex contenedor-fecha ms-2">
-                     <?php
-                     $cadena3 = $row['date_out'];
-                     $separador3 = "-";
-                     $array3 = explode($separador3, $cadena3);
-                     ?>
-                     <h6 class="letraNavBar posicion-border3  diseñofecha text-center">
-                        <?php echo $array3[2]; ?>
-                     </h6>
-                     <h6 class="letraNavBar posicion-border1  diseñofecha text-center" style="margin-left: 10px;">
-                        <?php echo $array3[1]; ?>
-                     </h6>
-                     <h6 class="letraNavBar posicion-border2  diseñofecha text-center" style="margin-left: 10px;">
-                        <?php echo $array3[0][2] . $array3[0][3]; ?>
-                     </h6>
+               <div class="d-block perfil-contrato">
+                  <div class="horarios">
+                     <h6 class="letraNavBar diseñoFechaIngreso">Ingreso:</h6>
+                     <div class="ps-1 d-flex contenedor-fecha ms-2">
+                        <?php
+                        $cadena2 = $row['date_in'];
+                        $separador2 = "-";
+                        $array2 = explode($separador2, $cadena2);
+                        ?>
+                        <h6 class="letraNavBar posicion-border3 diseñofecha text-center">
+                           <?php echo $array2[2]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border1 diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array2[1]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border2 diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array2[0][2] . $array2[0][3]; ?>
+                        </h6>
+                     </div>
+                     <h6 class="letraNavBar diseñoFechaSalida">Salida:</h6>
+                     <div class="ps-1 d-flex contenedor-fecha ms-2">
+                        <?php
+                        $cadena3 = $row['date_out'];
+                        $separador3 = "-";
+                        $array3 = explode($separador3, $cadena3);
+                        ?>
+                        <h6 class="letraNavBar posicion-border3  diseñofecha text-center">
+                           <?php echo $array3[2]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border1  diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array3[1]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border2  diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array3[0][2] . $array3[0][3]; ?>
+                        </h6>
+                     </div>
+                     <h6 class="letraNavBar diseñoFechaSalida">Finaliza:</h6>
+                     <div class="ps-1 d-flex contenedor-fecha ms-2">
+                        <?php
+                        $cadena4=$row['date_out_new'];
+                        $separador4 = "-";
+                        $array4 = explode($separador4, $cadena4);
+                        ?>
+                        <h6 class="letraNavBar posicion-border3  diseñofecha text-center">
+                           <?php echo $array4[2]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border1  diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array4[1]; ?>
+                        </h6>
+                        <h6 class="letraNavBar posicion-border2  diseñofecha text-center" style="margin-left: 10px;">
+                           <?php echo $array4[0][2] . $array4[0][3]; ?>
+                        </h6>
+                     </div>
                   </div>
                </div>
             </div>
@@ -192,12 +211,12 @@ if ($cantidadSemanas > 0) {
                <div id="estado-3">
                   <div class="d-flex">
                      <img src="../img/icono-faltas-injustificadas.webp">
-                     <form method="post" action="memorandums.php" >
+                     <form method="post" action="memorandums.php">
                         <input type="hidden" name="employee_id" value="<?php if (isset($row['employee_id'])) {
-                           echo $row['employee_id'];
-                        } else {
-                           echo "";
-                        } ?>">
+                                                                           echo $row['employee_id'];
+                                                                        } else {
+                                                                           echo "";
+                                                                        } ?>">
                         <button type="submit" class="enlaces__btn text-light" id="button1">
                            <p class="letraNavBar colorletraperfil">Memoramdun</p>
                         </button>
@@ -364,5 +383,37 @@ if ($cantidadSemanas > 0) {
          const button = document.getElementById(buttonId);
          button.classList.add("clicked");
       }
+   </script>
+   <script>
+      $.ajax({
+         type: 'POST',
+         url: 'get_cantidad_faltas_justificadas_injustificadas.php',
+         data: { employee_id: <?php echo $row['id']; ?>  },
+         dataType: 'json',
+         success: function (response) {                            
+            let faltaInjustificadas=response.faltas_injustificadas;
+            salidaNew('<?php echo $row['date_out']; ?>', faltaInjustificadas, <?php echo $row['id']; ?>);
+         }
+   });
+      function salidaNew(dato_salida,faltaInjustificadas,id_user){
+            var partesFecha = dato_salida.split('-');
+            var año = parseInt(partesFecha[0]);
+            var mes = parseInt(partesFecha[1]) - 1; 
+            var dia = parseInt(partesFecha[2]);
+            var nueva_fechaSalida = new Date(año, mes, dia);
+            nueva_fechaSalida.setDate(nueva_fechaSalida.getDate() + parseInt(faltaInjustificadas));
+            var nueva_fecha_salida_formateada = nueva_fechaSalida.toISOString().slice(0, 10);
+            <?php $cadena4="<script>document.write(nueva_fecha_salida_formateada);</script>"  ?>
+            
+            $.ajax({
+                type: 'POST',
+                url: 'insert_nueva_salida.php',
+                data: { employee_id: id_user, new_out:nueva_fecha_salida_formateada },
+                dataType: 'json',
+                success: function (response) {
+
+                }
+            });
+        }
    </script>
 </body>

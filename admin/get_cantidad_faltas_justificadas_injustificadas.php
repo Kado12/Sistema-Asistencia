@@ -2,9 +2,15 @@
 include 'includes/session.php';
 
 if (isset($_POST['employee_id'])) {
-  $employee_id = $_POST['employee_id'];
+    $employee_id = $_POST['employee_id'];
+    $result = cantFaltas($employee_id);
+    echo $result;
+}
 
-  $sql = "CREATE TEMPORARY TABLE temp_fechas(fecha DATE);
+function cantFaltas($employee_id) {
+    global $conn;
+
+    $sql = "CREATE TEMPORARY TABLE temp_fechas(fecha DATE);
 
     -- Obtener las fechas de entrada y salida en variables
     SET @current_date = (SELECT date_in FROM employees WHERE id = '$employee_id');
@@ -59,12 +65,10 @@ if (isset($_POST['employee_id'])) {
     }
 
     $faltas_injustificadas = $num_faltas - $faltas_justificadas;
-
-  echo json_encode(['faltas_injustificadas' => $faltas_injustificadas, 'faltas_justificadas' => $faltas_justificadas]);
- 
+    
+    return json_encode([
+        'faltas_injustificadas' => $faltas_injustificadas,
+        'faltas_justificadas' => $faltas_justificadas
+    ]);
 }
-
-
-
-
 ?>
